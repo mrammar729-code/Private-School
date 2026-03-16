@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pakistan Problem Reporter</title>
+    <link rel="preconnect" href="https://unpkg.com" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1 data-i18n="appTitle">Pakistan Problem Reporter</h1>
+      <div class="controls">
+        <label for="languageToggle" data-i18n="language">Language</label>
+        <select id="languageToggle">
+          <option value="en">English</option>
+          <option value="ur">اردو</option>
+        </select>
+      </div>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab active" data-tab="reports" data-i18n="reportsTab">Report Issue</button>
+      <button class="tab" data-tab="map" data-i18n="liveMapTab">Live Map</button>
+      <button class="tab" data-tab="chat" data-i18n="chatTab">Community Chat</button>
+      <button class="tab" data-tab="dashboard" data-i18n="dashboardTab">Transparency Dashboard</button>
+    </nav>
+
+    <main>
+      <section id="reports" class="tab-panel active">
+        <h2 data-i18n="reportIssue">Report a Local Issue</h2>
+        <div class="grid">
+          <form id="reportForm" class="card">
+            <div class="field-row">
+              <label for="city" data-i18n="city">City</label>
+              <select id="city" required>
+                <option value="">Select City</option>
+                <option>Karachi</option>
+                <option>Lahore</option>
+                <option>Islamabad</option>
+                <option>Rawalpindi</option>
+                <option>Faisalabad</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <label for="category" data-i18n="category">Category</label>
+              <select id="category" required>
+                <option value="">Select Category</option>
+                <option value="roads">Broken Roads</option>
+                <option value="electricity">Electricity Outage</option>
+                <option value="water">Water Shortage</option>
+                <option value="garbage">Garbage</option>
+                <option value="corruption">Corruption</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <label for="urgency" data-i18n="urgency">Urgency</label>
+              <select id="urgency">
+                <option value="urgent">Urgent</option>
+                <option value="medium">Medium</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <label for="description" data-i18n="description">Description</label>
+              <textarea id="description" rows="3" placeholder="Add details"></textarea>
+            </div>
+            <div class="field-row">
+              <label for="media" data-i18n="media">Photo / Video</label>
+              <input id="media" type="file" accept="image/*,video/*" />
+            </div>
+            <p class="hint" data-i18n="pinHint">Tap map to pin exact location.</p>
+            <button type="submit" class="btn-primary" data-i18n="submitReport">Submit Report</button>
+          </form>
+
+          <div class="card">
+            <h3 data-i18n="pinMap">Pin on Pakistan Map</h3>
+            <div id="reportMap" class="map"></div>
+            <p id="chosenLocation" class="hint" data-i18n="noPin">No location selected</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="map" class="tab-panel">
+        <h2 data-i18n="liveView">National Live Problem Map</h2>
+        <div class="toolbar card">
+          <select id="filterCity"><option value="">All Cities</option></select>
+          <select id="filterCategory"><option value="">All Categories</option></select>
+          <select id="filterStatus">
+            <option value="">All Statuses</option>
+            <option value="open">Open</option>
+            <option value="resolved">Resolved</option>
+          </select>
+          <span id="problemCount">0 problems</span>
+        </div>
+        <div class="grid">
+          <div class="card"><div id="liveMap" class="map"></div></div>
+          <div class="card">
+            <h3 data-i18n="oneTap">One-Tap Complaints</h3>
+            <div id="reportDetails" class="hint">Select a marker to view details and send complaint.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="chat" class="tab-panel">
+        <h2 data-i18n="community">Global Live Chat</h2>
+        <div class="grid">
+          <div class="card">
+            <label for="chatRoom" data-i18n="room">Room</label>
+            <select id="chatRoom">
+              <option>Pakistan Help</option>
+              <option>Karachi Issues</option>
+              <option>Lahore Issues</option>
+              <option>Corruption Fight</option>
+              <option>Water Emergency</option>
+            </select>
+            <div id="chatMessages" class="chat"></div>
+            <div class="chat-input">
+              <input id="chatInput" placeholder="Type a message" />
+              <button id="sendChat" class="btn-primary" data-i18n="send">Send</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 data-i18n="gamification">Community Badges</h3>
+            <ul id="badgeList"></ul>
+            <p class="hint" data-i18n="badgeHint">Earn badges by reporting and helping resolve issues.</p>
+            <h3 data-i18n="nocode">No-code Deployment</h3>
+            <ul>
+              <li>Store issues in Google Sheets + Glide.</li>
+              <li>Trigger complaints using Zapier (Email/SMS APIs).</li>
+              <li>Use Firebase/Socket.io for real-time rooms.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="dashboard" class="tab-panel">
+        <h2 data-i18n="transparency">Pakistan Transparency Dashboard</h2>
+        <div class="toolbar card">
+          <select id="dashProvince">
+            <option value="">All Provinces</option>
+            <option>Sindh</option>
+            <option>Punjab</option>
+          </select>
+          <select id="dashCity">
+            <option value="">All Cities</option>
+            <option>Karachi</option>
+            <option>Lahore</option>
+          </select>
+        </div>
+
+        <div class="cards">
+          <article class="card" id="budgetCard"></article>
+          <article class="card" id="projectCard"></article>
+          <article class="card" id="alertCard"></article>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <h3>Development Map Overlay</h3>
+            <div id="devMap" class="map"></div>
+          </div>
+          <div class="card">
+            <h3>Budget Visuals</h3>
+            <canvas id="budgetChart" width="300" height="300"></canvas>
+            <div id="timeline"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>User Verified Suggestions</h3>
+          <p>Verified users can propose updates with source links; admins publish weekly updates for factual neutrality.</p>
+          <ul id="sourceList"></ul>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="app.js"></script>
+  </body>
+</html>
